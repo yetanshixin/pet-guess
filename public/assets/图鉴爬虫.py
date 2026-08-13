@@ -38,21 +38,37 @@ def load_existing_data(filepath='petdex.json'):
     return []
 
 
-# === 新增：智能合并数据函数 ===
+# === 智能合并数据函数 ===
 def merge_data(new_data, old_data):
-    """
-    用新数据覆盖老数据。
-    保护机制：如果新数据是空值（0, "", []），而老数据有值，则保留老数据的值。
-    """
     merged = new_data.copy()
+
     for key, old_val in old_data.items():
         new_val = merged.get(key)
 
-        # 如果新抓取的数据为空（且老数据存在），则沿用手动修改过的老数据
+        # === 针对“特性”进行按索引 [0] 和 [1] 独立的精准合并 ===
+        if key == '特性':
+            old_trait = old_val if isinstance(old_val, list) else []
+            new_trait = new_val if isinstance(new_val, list) else []
+
+            # 安全提取旧数据的 [0]特性名 和 [1]特性详情
+            old_0 = old_trait[0] if len(old_trait) > 0 else ""
+            old_1 = old_trait[1] if len(old_trait) > 1 else ""
+
+            # 安全提取新数据的 [0]特性名 和 [1]特性详情
+            new_0 = new_trait[0] if len(new_trait) > 0 else ""
+            new_1 = new_trait[1] if len(new_trait) > 1 else ""
+
+            # 独立补全：新数据有就用新的，新数据为空/缺失就保留旧的
+            final_0 = new_0 if new_0 else old_0
+            final_1 = new_1 if new_1 else old_1
+
+            merged['特性'] = [final_0, final_1]
+            continue  # 特性单独处理完毕，跳过下方的通用逻辑
+
+        # 通用保护机制（针对 属性、蛋组、生命 等其他所有字段）
         if (new_val == 0 or new_val == "" or new_val == [] or new_val is None) and old_val:
             merged[key] = old_val
 
-        # 如果老数据里有爬虫压根没定义的额外字段（比如手动加的"备注"），也予以保留
         if key not in merged:
             merged[key] = old_val
 
@@ -76,8 +92,8 @@ def download_image(img_url, save_path, session):
 
 
 def safe_int(val_list):
-    if val_list and str(val_list[0]).isdigit():
-        return int(val_list[0])
+    if val_list and str(val_list[0]).strip().isdigit():
+        return int(val_list[0].strip())
     return 0
 
 
@@ -94,19 +110,19 @@ def get_more_info(url, pet_info, session):
     pet_doc = html.fromstring(pet_response.text)
 
     描述_list = pet_doc.xpath('//*[@id="mw-content-text"]//span[@class="sprite-typename"]/text()')
-    if 描述_list: pet_info["描述"] = 描述_list[0]
+    if 描述_list: pet_info["描述"] = 描述_list[0].strip()
 
     图片_list = pet_doc.xpath('//*[@id="mw-content-text"]//div[@class="tab-content active"]/img/@src')
     if 图片_list:
-        img_url = 图片_list[0]
+        img_url = 图片_list[0].strip()
         save_path = f"{FULL_DIR}/{pet_info['编号']}.png"
         download_image(img_url, save_path, session)
 
     介绍_list = pet_doc.xpath('//*[@id="mw-content-text"]//div[@class="sprite-info-desc"]/text()')
-    if 介绍_list: pet_info["介绍"] = 介绍_list[0]
+    if 介绍_list: pet_info["介绍"] = 介绍_list[0].strip()
 
     特性_list = pet_doc.xpath('//*[@id="mw-content-text"]//div[@class="sprite-trait-desc"]/text()')
-    if 特性_list: pet_info["特性"].append(特性_list[0])
+    if 特性_list: pet_info["特性"][1] = 特性_list[0].strip()
 
     if pet_info['阶段'] > 1:
         当前阶段_list = pet_doc.xpath(
@@ -118,19 +134,19 @@ def get_more_info(url, pet_info, session):
                 当前进化 = 当前进化_list[0]
                 进化等级_list = 当前进化.xpath('./span[@class="sprite-evolve-level"]/text()')
                 if 进化等级_list:
-                    进化等级_str = re.search(r'\d+', 进化等级_list[0])
+                    进化等级_str = re.search(r'\d+', 进化等级_list[0].strip())
                     if 进化等级_str: pet_info["进化等级"] = int(进化等级_str.group())
                 进化方式_list = 当前进化.xpath('./span[@class="sprite-evolve-extra"]/text()')
-                if 进化方式_list: pet_info["进化方式"] = 进化方式_list[0]
+                if 进化方式_list: pet_info["进化方式"] = 进化方式_list[0].strip()
 
     性别比例_list = pet_doc.xpath('//*[@id="mw-content-text"]//div[@class="sprite-ecology-value"]/text()')
-    if 性别比例_list: pet_info["性别比例"] = 性别比例_list[0]
+    if 性别比例_list: pet_info["性别比例"] = 性别比例_list[0].strip()
 
     蛋组_list = pet_doc.xpath('//*[@id="mw-content-text"]//div[@class="sprite-ecology-tags"]/span')
     if 蛋组_list:
         for 蛋组 in 蛋组_list:
             组_list = 蛋组.xpath('./text()')
-            if 组_list and 组_list[0] != "未发现": pet_info["蛋组"].append(组_list[0])
+            if 组_list and 组_list[0].strip() != "未发现": pet_info["蛋组"].append(组_list[0].strip())
 
     print(f"[{pet_info['编号']}] {pet_info['名称']} 数据抓取及合并完毕...")
 
@@ -169,7 +185,7 @@ def main():
     for pet in pet_list:
         pet_info = {
             '编号': 0, '名称': '', '描述': '', '介绍': '',
-            '特性': [], '属性': [], '总种族值': 0,
+            '特性': ['', ''], '属性': [], '总种族值': 0,
             '生命': 0, '物攻': 0, '魔攻': 0, '物防': 0, '魔防': 0, '速度': 0,
             '阶段': 0, '进化等级': 0, '进化方式': '', '蛋组': [],
             '性别比例': '', '进化链': '', '有地区形态': False, '有首领形态': False, '有异色形态': False
@@ -177,31 +193,31 @@ def main():
 
         编号_list = pet.xpath('./td[@class="dex-pet-number"]/text()')
         if not 编号_list: continue
-        编号_str = re.search(r'\d+', 编号_list[0])
+        编号_str = re.search(r'\d+', 编号_list[0].strip())
         if not 编号_str: continue
 
         编号 = int(编号_str.group())
         形态_list = pet.xpath('./@data-param4')
-        形态 = 形态_list[0] if 形态_list else "原始形态"
+        形态 = 形态_list[0].strip() if 形态_list else "原始形态"
         进化链_list = pet.xpath('./@data-dex-search')
-        进化链_str = re.search(r'\S*?进化链', 进化链_list[0] if 进化链_list else '')
+        进化链_str = re.search(r'\S*?进化链', 进化链_list[0].strip() if 进化链_list else '')
         进化链 = 进化链_str.group() if 进化链_str else ''
         是主形态 = False
         主形态_list = pet.xpath('./@data-param5')
-        if 主形态_list: 是主形态 = (主形态_list[0] == "主形态")
+        if 主形态_list: 是主形态 = (主形态_list[0].strip() == "主形态")
 
         if 是主形态:
             pet_info['编号'] = 编号
             pet_info['进化链'] = 进化链
             头像_list = pet.xpath('./td[@class="dex-pet-table-portrait"]/a/img/@src')
             if 头像_list:
-                img_url = 头像_list[0]
+                img_url = 头像_list[0].strip()
                 save_path = f"{AVATAR_DIR}/{编号}.png"
                 download_image(img_url, save_path, session)
 
             阶段_list = pet.xpath('./@data-param1')
             if 阶段_list:
-                阶段 = 阶段_list[0]
+                阶段 = 阶段_list[0].strip()
                 if 阶段 == '一阶':
                     pet_info['阶段'] = 1
                 elif 阶段 == '二阶':
@@ -210,13 +226,13 @@ def main():
                     pet_info['阶段'] = 3
 
             主属性_list = pet.xpath('./@data-param2')
-            if 主属性_list: pet_info['属性'].append(主属性_list[0])
+            if 主属性_list: pet_info['属性'].append(主属性_list[0].strip())
             副属性_list = pet.xpath('./@data-param3')
-            if 副属性_list: pet_info['属性'].append(副属性_list[0])
+            if 副属性_list: pet_info['属性'].append(副属性_list[0].strip())
             异色_list = pet.xpath('./@data-param6')
-            if 异色_list: pet_info['有异色形态'] = (异色_list[0] == "是")
+            if 异色_list: pet_info['有异色形态'] = (异色_list[0].strip() == "是")
             特性_list = pet.xpath('./td[5]/span/span/text()')
-            if 特性_list: pet_info['特性'].append(特性_list[0])
+            if 特性_list: pet_info['特性'][0] = 特性_list[0].strip()
 
             pet_info['生命'] = safe_int(pet.xpath('./td[6]/text()'))
             pet_info['速度'] = safe_int(pet.xpath('./td[7]/text()'))
@@ -234,7 +250,7 @@ def main():
             名称_list = pet.xpath('./td[@class="dex-pet-table-name"]//a/text()')
             if 名称_list:
                 pet_info['名称'] = re.sub(r'（.*?）', '', 名称_list[0]).strip()
-                INFO_URL = BASE_URL + urllib.parse.quote(名称_list[0])
+                INFO_URL = BASE_URL + urllib.parse.quote(名称_list[0].strip())
 
                 # 去专属页面获取详情
                 get_more_info(INFO_URL, pet_info, session)
