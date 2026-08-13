@@ -9,7 +9,9 @@
     border-radius: 4px;
     box-sizing: border-box;
     white-space: nowrap;
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #f4f4f5;
     border-color: #e9e9eb;
     color: #909399;
