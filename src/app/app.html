@@ -1,0 +1,126 @@
+@if(data?.length>0){
+<div class="head">
+  <button mat-icon-button (click)="openHelpDialog()">
+    <mat-icon>help</mat-icon>
+  </button>
+  <button mat-icon-button (click)="openSetDialog()">
+    <mat-icon>settings</mat-icon>
+  </button>
+</div>
+
+<div class="body">
+  <div class="input-box">
+    <mat-form-field appearance="outline">
+      <input matInput placeholder="输入精灵名称" [(ngModel)]="inputValue" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete">
+        @for (option of setSearchList(); track option) {
+        <mat-option [value]="option">{{option}}</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+
+  <div class="btn-box">
+    <button mat-raised-button [disabled]="!playing || guessList.length>0" (click)="guessFirst()">随机开局</button>
+    <button mat-raised-button [disabled]="!playing || !inputValue.trim()" color="primary"
+      (click)="guessPet()">确定</button>
+    <button mat-raised-button [disabled]="!playing" color="warn" (click)="openPetDialog()">投降</button>
+    <button mat-raised-button [disabled]="playing" color="accent" (click)="start()">重新开始</button>
+  </div>
+
+  <div class="info-box">
+    本轮猜测次数：{{guessList.length}}/{{guessChance}}
+  </div>
+
+  @for (item of guessList; track $index) {
+  <div class="pet-box">
+    <div class="pet-head">
+      <img [src]="'assets/images/avatars/'+item['编号']+'.png'">
+      <span>{{item['名称']}}</span>
+    </div>
+
+    <div class="pet-section">
+      <div class="section-title">属性</div>
+      <div class="section-content">
+        @for (i of item['属性']; track $index) {
+        <span class="tag" [class.green]="resultPet['属性'].includes(i)">{{i}}</span>
+        }
+      </div>
+    </div>
+
+    <div class="pet-section">
+      <div class="section-title">种族</div>
+      <div class="section-content">
+        <span class="tag" [class.green]="item['总种族值']===resultPet['总种族值']"
+          [class.yellow]="isBaseStatsYellow(item['总种族值'])">{{item['总种族值']+getBaseStatsArrow(item['总种族值'])}}</span>
+        @if(showMoreNumInfo){
+        <span class="tag" [class.green]="item['生命']===resultPet['生命']"
+          [class.yellow]="isHPYellow(item['生命'])">生命:{{item['生命']+getHPArrow(item['生命'])}}</span>
+        <span class="tag" [class.green]="item['速度']===resultPet['速度']"
+          [class.yellow]="isSpeedYellow(item['速度'])">速度:{{item['速度']+getSpeedArrow(item['速度'])}}</span>
+        }
+      </div>
+    </div>
+    @if(showMoreNumInfo){
+    <div class="pet-section">
+      <div class="section-title">攻防</div>
+      <div class="section-content">
+        <span class="tag"
+          [class.green]="getAttacksComparison(item)===getAttacksComparison(resultPet)">{{getAttacksComparison(item)}}</span>
+        <span class="tag"
+          [class.green]="getDefensesComparison(item)===getDefensesComparison(resultPet)">{{getDefensesComparison(item)}}</span>
+      </div>
+    </div>
+    }
+    <div class="pet-section">
+      <div class="section-title">赛季</div>
+      <div class="section-content">
+        <span class="tag" [class.green]="getSNum(item['编号'])===getSNum(resultPet['编号'])"
+          [class.yellow]="isSNumYellow(getSNum(item['编号']))">S{{getSNum(item['编号'])+getSNumArrow(getSNum(item['编号']))}}</span>
+      </div>
+    </div>
+
+    <div class="pet-section">
+      <div class="section-title">进化</div>
+      <div class="section-content">
+        <span class="tag" [class.green]="item['阶段']===resultPet['阶段']"
+          [class.yellow]="isStageYellow(item['阶段'])">当前{{item['阶段']}}阶{{getStageArrow(item['阶段'])}}</span>
+        @if(item['阶段']>1){
+        <span class="tag"
+          [class.green]="item['进化等级']===resultPet['进化等级']">lv.{{item['进化等级']}}以上{{getEvolutionLVArrow(item['进化等级'])}}</span>
+        @if(item['进化方式']){
+        <span class="tag" [class.green]="item['进化方式']===resultPet['进化方式']"
+          [class.yellow]="isEvolutionMethodYellow(item['进化方式'])">{{item['进化方式']}}</span>
+        }
+        }
+      </div>
+    </div>
+    @if(showEggAndSexInfo){
+    <div class="pet-section">
+      <div class="section-title">生态</div>
+      <div class="section-content">
+        @for (i of item['蛋组']; track $index) {
+        <span class="tag" [class.green]="resultPet['蛋组'].includes(i)">{{i}}</span>
+        }
+        <span class="tag" [class.green]="item['性别比例']===resultPet['性别比例']">性别比例:{{item['性别比例']}}</span>
+      </div>
+    </div>
+    }
+    <div class="pet-section">
+      <div class="section-title">形态</div>
+      <div class="section-content">
+        @if(item['有地区形态']){
+        <span class="tag" [class.green]="resultPet['有地区形态']">有地区形态</span>
+        }
+        @if(item['有首领形态']){
+        <span class="tag" [class.green]="resultPet['有首领形态']">有首领形态</span>
+        }
+        @if(item['有异色形态']){
+        <span class="tag" [class.green]="resultPet['有异色形态']">有异色形态</span>
+        }
+      </div>
+    </div>
+  </div>
+  }
+</div>
+}

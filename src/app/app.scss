@@ -1,0 +1,140 @@
+:host {
+    padding: 8px;
+    display: block;
+    box-sizing: border-box;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(243, 239, 227, 0.95);
+}
+
+.tag {
+    margin: 2px;
+    margin-right: 8px;
+    height: 20px;
+    padding: 0 5px;
+    line-height: 19px;
+    font-size: 12px;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px;
+    box-sizing: border-box;
+    white-space: nowrap;
+    display: inline-block;
+    background-color: #f4f4f5;
+    border-color: #e9e9eb;
+    color: #909399;
+}
+
+.yellow {
+    background-color: #fdf6ec;
+    border-color: #faecd8;
+    color: #e6a23c;
+}
+
+.green {
+    background-color: #f0f9eb !important;
+    border-color: #e1f3d8 !important;
+    color: #67c23a !important;
+}
+
+.head {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 0 24px;
+
+    button {
+        margin-left: 4px;
+        color: #606266;
+    }
+}
+
+.body {
+    padding: 40px 40px;
+
+    .input-box {
+        margin-bottom: 96px;
+        display: flex;
+        justify-content: center;
+
+        .mat-mdc-form-field {
+            width: 66%;
+        }
+    }
+
+    .btn-box {
+        padding: 12px 0 0;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+
+        button {
+            margin: 0 12px 12px;
+            width: 300px;
+            height: 48px;
+            font-size: 14px;
+        }
+    }
+
+    .info-box {
+        margin: 20px 12px;
+        padding: 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f5f7fa;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+        font-weight: 600;
+        color: #606266;
+        font-size: 16px;
+    }
+
+    .pet-box {
+        padding: 0 12px;
+        border: 1px solid #ebeef5;
+        border-radius: 8px;
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+        background-color: #fff;
+        margin-bottom: 16px;
+
+        .pet-head {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 0;
+
+            img {
+                width: 50px;
+                height: 50px;
+                margin-right: 16px;
+            }
+
+            span {
+                font-weight: 700;
+                font-size: 16px;
+            }
+        }
+
+        .pet-section {
+            padding: 8px 0;
+            border-top: 1px dashed #ebeef5;
+            display: flex;
+            align-items: center;
+
+            .section-title {
+                font-size: 14px;
+                font-weight: 500;
+                margin-right: 16px;
+                color: #606266;
+            }
+
+            .section-content {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+        }
+    }
+}

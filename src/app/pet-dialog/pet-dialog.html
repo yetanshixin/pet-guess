@@ -1,0 +1,32 @@
+<h2 mat-dialog-title class="dialog-title">
+    {{ getHeadText() }}
+</h2>
+
+<mat-dialog-content class="enhanced-dialog">
+    <div class="pet-box">
+        <div class="pet-left">
+            <img [src]="'assets/images/full/'+data.pet['编号']+'.png'">
+            <div class="属性">
+                @for (item of data.pet['属性']; track $index) {
+                <span class="tag">{{item}}</span>
+                }
+            </div>
+        </div>
+        <div class="pet-right">
+            <div class="编号">{{'NO.'+data.pet['编号']}}</div>
+            <div class="名称">{{data.pet['名称']}}</div>
+            <div class="描述">{{data.pet['描述']}}</div>
+        </div>
+    </div>
+    <div class="特性-box">
+        <div class="特性名">{{data.pet['特性'][0]}}</div>
+        <div class="特性">{{data.pet['特性'][1]}}</div>
+    </div>
+    <div class="介绍-box">{{data.pet['介绍']}}</div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dialog-footer">
+    <span class="tip">本轮共尝试了{{data.guessCount}}次</span>
+    <button mat-button (click)="close()">关闭</button>
+    <button mat-flat-button color="primary" (click)="restart()">再来一局</button>
+</mat-dialog-actions>

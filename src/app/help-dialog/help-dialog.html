@@ -1,0 +1,62 @@
+<h2 mat-dialog-title class="dialog-title">游戏帮助</h2>
+
+<mat-dialog-content class="enhanced-dialog">
+    <div class="intro-content">
+
+        <div class="section-block">
+            <div class="section-title">游戏目标</div>
+            <p class="section-desc">通过输入精灵名称进行猜测，找出目标精灵。每次猜测后，你将获得输入精灵的相关信息，帮助你逐步接近答案。</p>
+        </div>
+
+        <div class="section-block">
+            <div class="section-title">提示颜色说明</div>
+            <div class="hint-section">
+                <div class="hint-item">
+                    <span class="tag tag-success">绿色高亮</span>
+                    <span>表示该信息与目标精灵完全相同。</span>
+                </div>
+                <div class="hint-item">
+                    <span class="tag tag-warning">黄色高亮</span>
+                    <span>表示该信息与目标精灵接近但不完全相同。</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-block">
+            <div class="section-title">黄色高亮的触发条件</div>
+            <ul class="styled-list">
+                <li><strong>总种族值：</strong>与目标精灵的差值 ≤ 50</li>
+                <li><strong>生命/速度：</strong>与目标精灵的差值 ≤ 10</li>
+                <li><strong>赛季：</strong>与目标赛季相邻（差值 ≤ 1）</li>
+                <li><strong>阶段：</strong>与目标精灵的差值 ≤ 1</li>
+                <li><strong>进化方式：</strong>不完全相同但属于相似进化方式（例如使用技能、击败精灵、血脉、突破等）</li>
+            </ul>
+        </div>
+
+        <div class="section-block">
+            <div class="section-title">上下箭头的作用</div>
+            <p class="section-desc">在种族值、赛季、阶段、进化等级等数值类信息中，箭头提示你猜测的方向是否正确：</p>
+            <ul class="arrow-list">
+                <li><span class="arrow-icon up">↑</span> 表示你输入的数值<strong>低于</strong>目标，建议下次选择数值更高的精灵。</li>
+                <li><span class="arrow-icon down">↓</span> 表示你输入的数值<strong>高于</strong>目标，建议下次选择数值更低的精灵。</li>
+            </ul>
+        </div>
+
+        <div class="section-block feature-block">
+            <div class="section-title">功能介绍</div>
+            <div class="feature-item">
+                <div class="feature-name">简单模式</div>
+                <div class="feature-desc">开启后，答案仅会出现最终形态的精灵（同一进化链中阶段最大的精灵），下一轮生效。</div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-name">随机开局</div>
+                <div class="feature-desc">为首次猜测随机选择一个精灵，适合不想手动输入起手猜测的玩家。</div>
+            </div>
+        </div>
+
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dialog-footer">
+    <button mat-raised-button color="primary" (click)="cancel()">开始游戏</button>
+</mat-dialog-actions>

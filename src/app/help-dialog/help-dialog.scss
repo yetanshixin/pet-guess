@@ -1,0 +1,198 @@
+/* 弹窗整体优化 */
+.dialog-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: #2c3e50;
+    border-bottom: 1px solid #ebeef5;
+    background-color: #E8E1D1;
+}
+
+.enhanced-dialog {
+    background-color: rgba(243, 239, 227, 0.95);
+    max-height: 70vh;
+    padding: 20px 24px !important; // 覆盖默认内边距确保对齐
+
+    // 优化滚动条样式 (适配 Webkit)
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #dcdfe6;
+        border-radius: 4px;
+    }
+}
+
+.intro-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px; // 统一大区块之间的间距
+    color: #3f51b5; // 基础文字颜色
+    line-height: 1.6;
+}
+
+/* 小节标题样式 */
+.section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #303133;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+
+    // 左侧主题色强调线
+    &::before {
+        content: '';
+        display: inline-block;
+        width: 4px;
+        height: 16px;
+        background-color: #3f51b5; // Material Primary Color
+        border-radius: 2px;
+        margin-right: 8px;
+    }
+}
+
+.section-desc {
+    margin: 0;
+    color: #606266;
+    font-size: 14.5px;
+}
+
+/* 提示颜色区块 */
+.hint-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #ebeef5;
+}
+
+.hint-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14.5px;
+    color: #606266;
+}
+
+.tag {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+
+    &-success {
+        background-color: #f0f9eb;
+        color: #67c23a;
+        border: 1px solid #e1f3d8;
+    }
+
+    &-warning {
+        background-color: #fdf6ec;
+        color: #e6a23c;
+        border: 1px solid #faecd8;
+    }
+}
+
+/* 列表样式优化 */
+.styled-list {
+    margin: 0;
+    padding-left: 24px;
+    color: #606266;
+    font-size: 14.5px;
+
+    li {
+        margin-bottom: 8px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        strong {
+            color: #303133;
+        }
+    }
+}
+
+/* 箭头提示区块 */
+.arrow-list {
+    margin: 12px 0 0;
+    padding-left: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    li {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        font-size: 14.5px;
+        color: #606266;
+        line-height: 1.5;
+    }
+}
+
+.arrow-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+/* 功能介绍区块 */
+.feature-block {
+    background-color: #f4f6f8;
+    padding: 16px;
+    border-radius: 8px;
+
+    .section-title::before {
+        background-color: #607d8b; // 给附加功能换个稍微内敛的强调色
+    }
+}
+
+.feature-item {
+    margin-bottom: 16px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.feature-name {
+    display: inline-block;
+    font-weight: 600;
+    color: #303133;
+    margin-bottom: 4px;
+    font-size: 14.5px;
+}
+
+.feature-desc {
+    color: #606266;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* 底部操作区 */
+.dialog-footer {
+    margin: 0;
+    padding: 16px 24px;
+    border-top: 1px solid #ebeef5;
+    background-color: #E8E1D1;
+
+    button {
+        padding: 0 24px;
+        border-radius: 6px;
+        font-weight: bold;
+    }
+}

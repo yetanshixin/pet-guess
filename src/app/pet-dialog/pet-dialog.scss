@@ -1,0 +1,135 @@
+.tag {
+    margin: 2px;
+    height: 20px;
+    padding: 0 5px;
+    line-height: 19px;
+    font-size: 12px;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px;
+    box-sizing: border-box;
+    white-space: nowrap;
+    display: inline-block;
+    background-color: #f4f4f5;
+    border-color: #e9e9eb;
+    color: #909399;
+}
+
+.dialog-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: #2c3e50;
+    border-bottom: 1px solid #ebeef5;
+    background-color: #E8E1D1;
+}
+
+.enhanced-dialog {
+    background-color: rgba(243, 239, 227, 0.95);
+    max-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 300px;
+    padding: 0 24px 20px !important; // 覆盖默认内边距确保对齐
+
+    // 优化滚动条样式 (适配 Webkit)
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #dcdfe6;
+        border-radius: 4px;
+    }
+}
+
+.dialog-footer {
+    margin: 0;
+    padding: 16px 24px;
+    border-top: 1px solid #ebeef5;
+    background-color: #E8E1D1;
+
+    button {
+        padding: 0 24px;
+        border-radius: 6px;
+        font-weight: bold;
+    }
+}
+
+.tip {
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    left: 30px;
+}
+
+.pet-box {
+    display: flex;
+    align-items: center;
+
+    .pet-left {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        img {
+            width: 70px;
+            height: 70px;
+        }
+
+        .属性 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    .pet-right {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        .描述 {
+            color: #606266;
+            font-size: 14px;
+        }
+
+        .编号 {
+            font-size: 12px;
+            color: #343437;
+        }
+
+        .名称 {
+            font-size: 34px;
+            color: #24333a;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+    }
+
+}
+
+.特性-box {
+    .特性名 {
+        color: #272727;
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+    .特性 {
+        font-size: 12px;
+        color: #62605E;
+    }
+}
+
+.介绍-box {
+    color: #62605E;
+    font-size: 14px;
+}
