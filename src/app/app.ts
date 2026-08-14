@@ -216,6 +216,9 @@ export class App implements OnInit {
         if (this.playing && this.guessList.length >= this.guessChance) {
           this.openPetDialog()
         }
+        if (this.playing && this.easyModel && !this.finalPets.includes(this.resultPet)) {
+          this.start()
+        }
       }
     });
   }
