@@ -27,7 +27,7 @@ os.makedirs(AVATAR_DIR, exist_ok=True)
 os.makedirs(FULL_DIR, exist_ok=True)
 
 
-# === 新增：读取本地已有数据 ===
+# === 读取本地已有数据 ===
 def load_existing_data(filepath='petdex.json'):
     if os.path.exists(filepath):
         try:
