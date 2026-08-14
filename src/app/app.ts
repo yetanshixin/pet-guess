@@ -34,6 +34,8 @@ export interface Pet {
   阶段: number; // 1阶
   进化等级: number; //lv.1
   进化方式: string;
+  身高: number[];
+  体重: number[];
   蛋组: string[];
   性别比例: string;
   进化链: string;
@@ -57,6 +59,7 @@ export class App implements OnInit {
   resultPet = {} as Pet
   inputValue = ''
   showMoreNumInfo = true
+  showHeightAndWeight = true
   showEggAndSexInfo = true
   showSArrow = true
   easyModel = false
@@ -108,6 +111,15 @@ export class App implements OnInit {
     } else {
       return '物防=魔防'
     }
+  }
+  formatAverage(arr: number[]) {
+    if (!arr || arr.length === 0) return 0;
+
+    const sum = arr.reduce((a, b) => a + b, 0);
+    const avg = sum / arr.length;
+
+    // 先保留两位小数，再用 parseFloat 去除多余的 0
+    return parseFloat(avg.toFixed(2));
   }
   start() {
     this.guessList = []
@@ -184,6 +196,7 @@ export class App implements OnInit {
       autoFocus: false,
       data: {
         showMoreNumInfo: this.showMoreNumInfo,
+        showHeightAndWeight: this.showHeightAndWeight,
         showEggAndSexInfo: this.showEggAndSexInfo,
         showSArrow: this.showSArrow,
         guessChance: this.guessChance,
@@ -194,6 +207,7 @@ export class App implements OnInit {
     dialogRef.afterClosed().subscribe((result: SetDialogData | undefined) => {
       if (result) {
         this.showMoreNumInfo = result.showMoreNumInfo
+        this.showHeightAndWeight = result.showHeightAndWeight
         this.showEggAndSexInfo = result.showEggAndSexInfo
         this.showSArrow = result.showSArrow
         this.guessChance = result.guessChance
@@ -274,6 +288,21 @@ export class App implements OnInit {
 
     return keywords.some(keyword => this.resultPet['进化方式'].includes(keyword) && 进化方式.includes(keyword))
   }
+  isEvolutionLVYellow(进化等级: number) {
+    if ((this.resultPet['进化等级'] - 5) <= 进化等级 && 进化等级 <= (this.resultPet['进化等级'] + 5)) {
+      return true
+    }
+    return false
+  }
+  isHeightYellow(平均身高: number) {
+    if ((this.formatAverage(this.resultPet['身高']) - 0.15) <= 平均身高 && 平均身高 <= (this.formatAverage(this.resultPet['身高']) + 0.15)) {
+      return true
+    }
+    return false
+  }
+  isWeightYellow(平均体重: number) {
+    return Math.abs(this.formatAverage(this.resultPet['体重']) - 平均体重) / this.formatAverage(this.resultPet['体重']) <= 0.2
+  }
 
   // ↑↓箭头逻辑
 
@@ -286,7 +315,6 @@ export class App implements OnInit {
       return ''
     }
   }
-
   getHPArrow(生命: number) {
     if (生命 < this.resultPet['生命']) {
       return '↑'
@@ -296,7 +324,6 @@ export class App implements OnInit {
       return ''
     }
   }
-
   getSpeedArrow(速度: number) {
     if (速度 < this.resultPet['速度']) {
       return '↑'
@@ -306,7 +333,6 @@ export class App implements OnInit {
       return ''
     }
   }
-
   getSNumArrow(赛季: number) {
     if (!this.showSArrow) {
       return ''
@@ -319,7 +345,6 @@ export class App implements OnInit {
       return ''
     }
   }
-
   getStageArrow(阶段: number) {
     if (阶段 < this.resultPet['阶段']) {
       return '↑'
@@ -329,11 +354,28 @@ export class App implements OnInit {
       return ''
     }
   }
-
   getEvolutionLVArrow(进化等级: number) {
     if (进化等级 < this.resultPet['进化等级']) {
       return '↑'
     } else if (进化等级 > this.resultPet['进化等级']) {
+      return '↓'
+    } else {
+      return ''
+    }
+  }
+  getHeightArrow(平均身高: number) {
+    if (平均身高 < this.formatAverage(this.resultPet['身高'])) {
+      return '↑'
+    } else if (平均身高 > this.formatAverage(this.resultPet['身高'])) {
+      return '↓'
+    } else {
+      return ''
+    }
+  }
+  getWeightArrow(平均体重: number) {
+    if (平均体重 < this.formatAverage(this.resultPet['体重'])) {
+      return '↑'
+    } else if (平均体重 > this.formatAverage(this.resultPet['体重'])) {
       return '↓'
     } else {
       return ''

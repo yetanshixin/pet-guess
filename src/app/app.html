@@ -86,8 +86,8 @@
         <span class="tag" [class.green]="item['阶段']===resultPet['阶段']"
           [class.yellow]="isStageYellow(item['阶段'])">当前{{item['阶段']}}阶{{getStageArrow(item['阶段'])}}</span>
         @if(item['阶段']>1){
-        <span class="tag"
-          [class.green]="item['进化等级']===resultPet['进化等级']">lv.{{item['进化等级']}}以上{{getEvolutionLVArrow(item['进化等级'])}}</span>
+        <span class="tag" [class.green]="item['进化等级']===resultPet['进化等级']"
+          [class.yellow]="isEvolutionLVYellow(item['进化等级'])">lv.{{item['进化等级']}}以上{{getEvolutionLVArrow(item['进化等级'])}}</span>
         @if(item['进化方式']){
         <span class="tag" [class.green]="item['进化方式']===resultPet['进化方式']"
           [class.yellow]="isEvolutionMethodYellow(item['进化方式'])">{{item['进化方式']}}</span>
@@ -95,6 +95,17 @@
         }
       </div>
     </div>
+    @if(showHeightAndWeight){
+    <div class="pet-section">
+      <div class="section-title">体型</div>
+      <div class="section-content">
+        <span class="tag" [class.green]="formatAverage(item['身高'])===formatAverage(resultPet['身高'])"
+          [class.yellow]="isHeightYellow(formatAverage(item['身高']))">平均身高:{{formatAverage(item['身高'])+getHeightArrow(formatAverage(item['身高']))}}</span>
+        <span class="tag" [class.green]="formatAverage(item['体重'])===formatAverage(resultPet['体重'])"
+          [class.yellow]="isWeightYellow(formatAverage(item['体重']))">平均体重:{{formatAverage(item['体重'])+getWeightArrow(formatAverage(item['体重']))}}</span>
+      </div>
+    </div>
+    }
     @if(showEggAndSexInfo){
     <div class="pet-section">
       <div class="section-title">生态</div>

@@ -13,6 +13,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 export interface SetDialogData {
     showMoreNumInfo: boolean;
+    showHeightAndWeight: boolean;
     showEggAndSexInfo: boolean;
     showSArrow: boolean;
     guessChance: number;

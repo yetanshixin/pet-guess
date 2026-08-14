@@ -12,6 +12,11 @@
         </mat-slide-toggle>
     </div>
     <div class="setting-item">
+        <mat-slide-toggle [(ngModel)]="currentSettings.showHeightAndWeight" color="primary">
+            显示体型信息
+        </mat-slide-toggle>
+    </div>
+    <div class="setting-item">
         <mat-slide-toggle [(ngModel)]="currentSettings.showEggAndSexInfo" color="primary">
             显示蛋组/性别比例信息
         </mat-slide-toggle>
