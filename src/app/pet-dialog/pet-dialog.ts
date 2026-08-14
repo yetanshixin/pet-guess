@@ -35,11 +35,11 @@ export class PetDialog {
 
     getHeadText() {
         if (this.data.isSuccess) { // 成功
-            return '太厉害了，鼓掌鼓掌👏👏👏'
+            return '太厉害了，鼓掌鼓掌👏'
         } else if (this.data.guessCount >= this.data.guessChance) { // 机会用尽
-            return '没机会了，游戏结束😵😵😵'
+            return '没机会了，游戏结束😵'
         } else { // 投降
-            return '你已投降，游戏结束😓😓😓'
+            return '你已投降，游戏结束😓'
         }
     }
 }
