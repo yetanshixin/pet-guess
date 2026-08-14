@@ -31,9 +31,9 @@
     max-height: 70vh;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 8px;
     min-width: 300px;
-    padding: 0 24px 20px !important; // 覆盖默认内边距确保对齐
+    padding: 12px 24px 20px !important; // 覆盖默认内边距确保对齐
 
     // 优化滚动条样式 (适配 Webkit)
     &::-webkit-scrollbar {
@@ -119,6 +119,10 @@
 }
 
 .特性-box {
+    padding: 8px 0;
+    border-top: 1px dashed #C4C2B5;
+    border-bottom: 1px dashed #C4C2B5;
+
     .特性名 {
         color: #272727;
         font-weight: 500;
