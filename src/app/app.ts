@@ -295,10 +295,7 @@ export class App implements OnInit {
     return false
   }
   isHeightYellow(平均身高: number) {
-    if ((this.formatAverage(this.resultPet['身高']) - 0.15) <= 平均身高 && 平均身高 <= (this.formatAverage(this.resultPet['身高']) + 0.15)) {
-      return true
-    }
-    return false
+    return Math.abs(this.formatAverage(this.resultPet['身高']) - 平均身高) / this.formatAverage(this.resultPet['身高']) <= 0.2
   }
   isWeightYellow(平均体重: number) {
     return Math.abs(this.formatAverage(this.resultPet['体重']) - 平均体重) / this.formatAverage(this.resultPet['体重']) <= 0.2
