@@ -35,9 +35,9 @@ def export_json_to_csv(json_filepath='petdex.json', csv_filepath='petdex.csv'):
             for key in headers:
                 val = row.get(key, "")
 
-                # 美化输出格式：将 Python 的列表拼接为字符串（例如：["草", "毒"] -> "草 毒"）
+                # 美化输出格式：将 Python 的列表拼接为字符串（例如：["草", "毒"] -> "草-毒"）
                 if isinstance(val, list):
-                    processed_row[key] = " ".join(str(v) for v in val)
+                    processed_row[key] = "-".join(str(v) for v in val)
 
                 # 将布尔值转换为 "是" 或 "否"
                 elif isinstance(val, bool):

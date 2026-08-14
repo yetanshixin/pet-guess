@@ -27,7 +27,7 @@ os.makedirs(AVATAR_DIR, exist_ok=True)
 os.makedirs(FULL_DIR, exist_ok=True)
 
 
-# === 新增：读取本地已有数据 ===
+# === 读取本地已有数据 ===
 def load_existing_data(filepath='petdex.json'):
     if os.path.exists(filepath):
         try:
@@ -124,6 +124,29 @@ def get_more_info(url, pet_info, session):
     特性_list = pet_doc.xpath('//*[@id="mw-content-text"]//div[@class="sprite-trait-desc"]/text()')
     if 特性_list: pet_info["特性"][1] = 特性_list[0].strip()
 
+    体型_list = pet_doc.xpath(
+        '//*[@id="mw-content-text"]//div[@class="info-attrpanel"]/div[@class="sprite-info-attrother info-attrpanel-right"]/div[1]')
+    if 体型_list and 体型_list[0] is not None:
+        体型 = 体型_list[0]
+        身高_list = 体型.xpath('./div[1]/span/text()')
+        if 身高_list:
+            身高_str = 身高_list[0].strip()
+            if '~' in 身高_str:
+                a, b = 身高_str.split('~', 1)
+                pet_info["身高"].append(float(a))
+                pet_info["身高"].append(float(b))
+            else:
+                pet_info["身高"].append(float(身高_str))
+        体重_list = 体型.xpath('./div[2]/span/text()')
+        if 体重_list:
+            体重_str = 体重_list[0].strip()
+            if '~' in 体重_str:
+                a, b = 体重_str.split('~', 1)
+                pet_info["体重"].append(float(a))
+                pet_info["体重"].append(float(b))
+            else:
+                pet_info["体重"].append(float(体重_str))
+
     if pet_info['阶段'] > 1:
         当前阶段_list = pet_doc.xpath(
             f'//*[@id="mw-content-text"]//div[@class="sprite-evolve-section"][{pet_info["阶段"]}]')
@@ -187,7 +210,7 @@ def main():
             '编号': 0, '名称': '', '描述': '', '介绍': '',
             '特性': ['', ''], '属性': [], '总种族值': 0,
             '生命': 0, '物攻': 0, '魔攻': 0, '物防': 0, '魔防': 0, '速度': 0,
-            '阶段': 0, '进化等级': 0, '进化方式': '', '蛋组': [],
+            '阶段': 0, '进化等级': 0, '进化方式': '', '身高': [], '体重': [], '蛋组': [],
             '性别比例': '', '进化链': '', '有地区形态': False, '有首领形态': False, '有异色形态': False
         }
 
