@@ -89,8 +89,10 @@ export class App implements OnInit {
       return 1
     } else if (348 <= 编号 && 编号 <= 375) {
       return 2
-    } else if (376 <= 编号) {
+    } else if (376 <= 编号 && 编号 <= 442) {
       return 3
+    } else if (443 <= 编号) {
+      return 4
     }
     return 0
   }
@@ -384,3 +386,4 @@ export class App implements OnInit {
     }
   }
 }
+// 更新网页：ng deploy --base-href=/pet-guess/
