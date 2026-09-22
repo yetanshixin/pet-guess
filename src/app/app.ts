@@ -411,7 +411,7 @@ export class App implements OnInit {
     }
   }
   getShinySNumArrow(赛季: number) {
-    if (!this.showSArrow) {
+    if (!this.showSArrow || !this.resultPet.形态.有异色形态) {
       return ''
     }
     if (赛季 < this.resultPet.形态.异色赛季) {
