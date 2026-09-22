@@ -81,7 +81,7 @@ export class App implements OnInit {
   guessChance = 10 // 3-15
   guessList = [] as Pet[]
   playing = false
-  keywords = ['使用', '击败', '血脉', '突破', '天气', '点', '身高', '体重', '交互', '性']
+  keywords = ['使用', '击败', '血脉', '突破', '天气', '点', '身高', '体重', '交互', '性', '位于']
   getPets(): Observable<Pet[]> {
     return this.http.get<Pet[]>(this.jsonPath);
   }
