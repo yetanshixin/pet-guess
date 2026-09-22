@@ -51,13 +51,13 @@
     <div class="pet-section">
       <div class="section-title">种族</div>
       <div class="section-content">
-        <span class="tag" [class.green]="item['总种族值']===resultPet['总种族值']"
-          [class.yellow]="isBaseStatsYellow(item['总种族值'])">{{item['总种族值']+getBaseStatsArrow(item['总种族值'])}}</span>
+        <span class="tag" [class.green]="item['种族']['总种族值']===resultPet['种族']['总种族值']"
+          [class.yellow]="isBaseStatsYellow(item['种族']['总种族值'])">{{item['种族']['总种族值']+getBaseStatsArrow(item['种族']['总种族值'])}}</span>
         @if(showMoreNumInfo){
-        <span class="tag" [class.green]="item['生命']===resultPet['生命']"
-          [class.yellow]="isHPYellow(item['生命'])">生命:{{item['生命']+getHPArrow(item['生命'])}}</span>
-        <span class="tag" [class.green]="item['速度']===resultPet['速度']"
-          [class.yellow]="isSpeedYellow(item['速度'])">速度:{{item['速度']+getSpeedArrow(item['速度'])}}</span>
+        <span class="tag" [class.green]="item['种族']['生命']===resultPet['种族']['生命']"
+          [class.yellow]="isHPYellow(item['种族']['生命'])">生命:{{item['种族']['生命']+getHPArrow(item['种族']['生命'])}}</span>
+        <span class="tag" [class.green]="item['种族']['速度']===resultPet['种族']['速度']"
+          [class.yellow]="isSpeedYellow(item['种族']['速度'])">速度:{{item['种族']['速度']+getSpeedArrow(item['种族']['速度'])}}</span>
         }
       </div>
     </div>
@@ -83,14 +83,14 @@
     <div class="pet-section">
       <div class="section-title">进化</div>
       <div class="section-content">
-        <span class="tag" [class.green]="item['阶段']===resultPet['阶段']"
-          [class.yellow]="isStageYellow(item['阶段'])">当前{{item['阶段']}}阶{{getStageArrow(item['阶段'])}}</span>
-        @if(item['阶段']>1){
-        <span class="tag" [class.green]="item['进化等级']===resultPet['进化等级']"
-          [class.yellow]="isEvolutionLVYellow(item['进化等级'])">lv.{{item['进化等级']}}以上{{getEvolutionLVArrow(item['进化等级'])}}</span>
-        @if(item['进化方式']){
-        <span class="tag" [class.green]="item['进化方式']===resultPet['进化方式']"
-          [class.yellow]="isEvolutionMethodYellow(item['进化方式'])">{{item['进化方式']}}</span>
+        <span class="tag" [class.green]="item['进化']['阶段']===resultPet['进化']['阶段']"
+          [class.yellow]="isStageYellow(item['进化']['阶段'])">当前{{item['进化']['阶段']}}阶{{getStageArrow(item['进化']['阶段'])}}</span>
+        @if(item['进化']['阶段']>1){
+        <span class="tag" [class.green]="item['进化']['进化等级']===resultPet['进化']['进化等级']"
+          [class.yellow]="isEvolutionLVYellow(item['进化']['进化等级'])">lv.{{item['进化']['进化等级']}}以上{{getEvolutionLVArrow(item['进化']['进化等级'])}}</span>
+        @if(item['进化']['进化方式']){
+        <span class="tag" [class.green]="item['进化']['进化方式']===resultPet['进化']['进化方式']"
+          [class.yellow]="isEvolutionMethodYellow(item['进化']['进化方式'])">{{item['进化']['进化方式']}}</span>
         }
         }
       </div>
@@ -99,10 +99,10 @@
     <div class="pet-section">
       <div class="section-title">体型</div>
       <div class="section-content">
-        <span class="tag" [class.green]="formatAverage(item['身高'])===formatAverage(resultPet['身高'])"
-          [class.yellow]="isHeightYellow(formatAverage(item['身高']))">平均身高:{{formatAverage(item['身高'])+getHeightArrow(formatAverage(item['身高']))}}</span>
-        <span class="tag" [class.green]="formatAverage(item['体重'])===formatAverage(resultPet['体重'])"
-          [class.yellow]="isWeightYellow(formatAverage(item['体重']))">平均体重:{{formatAverage(item['体重'])+getWeightArrow(formatAverage(item['体重']))}}</span>
+        <span class="tag" [class.green]="formatAverage(item['体型']['身高'])===formatAverage(resultPet['体型']['身高'])"
+          [class.yellow]="isHeightYellow(formatAverage(item['体型']['身高']))">平均身高:{{formatAverage(item['体型']['身高'])+getHeightArrow(formatAverage(item['体型']['身高']))}}</span>
+        <span class="tag" [class.green]="formatAverage(item['体型']['体重'])===formatAverage(resultPet['体型']['体重'])"
+          [class.yellow]="isWeightYellow(formatAverage(item['体型']['体重']))">平均体重:{{formatAverage(item['体型']['体重'])+getWeightArrow(formatAverage(item['体型']['体重']))}}</span>
       </div>
     </div>
     }
@@ -110,24 +110,31 @@
     <div class="pet-section">
       <div class="section-title">生态</div>
       <div class="section-content">
-        @for (i of item['蛋组']; track $index) {
-        <span class="tag" [class.green]="resultPet['蛋组'].includes(i)">{{i}}</span>
+        @for (i of item['生态']['蛋组']; track $index) {
+        <span class="tag" [class.green]="resultPet['生态']['蛋组'].includes(i)">{{i}}</span>
         }
-        <span class="tag" [class.green]="item['性别比例']===resultPet['性别比例']">性别比例:{{item['性别比例']}}</span>
+        @if (item['生态']['雄性占比']!=null){
+        <span class="tag" [class.green]="item['生态']['雄性占比']===resultPet['生态']['雄性占比']"
+          [class.yellow]="isMaleProportionYellow(item['生态']['雄性占比'])">雄性占比:{{item['生态']['雄性占比']+'%'+getMaleProportionArrow(item['生态']['雄性占比'])}}</span>
+        }
+        @if (item['生态']['可同乘']){
+        <span class="tag" [class.green]="resultPet['生态']['可同乘']">可同乘</span>
+        }
       </div>
     </div>
     }
     <div class="pet-section">
       <div class="section-title">形态</div>
       <div class="section-content">
-        @if(item['有地区形态']){
-        <span class="tag" [class.green]="resultPet['有地区形态']">有地区形态</span>
+        @if(item['形态']['有地区形态']){
+        <span class="tag" [class.green]="resultPet['形态']['有地区形态']">有地区形态</span>
         }
-        @if(item['有首领形态']){
-        <span class="tag" [class.green]="resultPet['有首领形态']">有首领形态</span>
+        @if(item['形态']['有首领形态']){
+        <span class="tag" [class.green]="resultPet['形态']['有首领形态']">有首领形态</span>
         }
-        @if(item['有异色形态']){
-        <span class="tag" [class.green]="resultPet['有异色形态']">有异色形态</span>
+        @if(item['形态']['有异色形态']){
+        <span class="tag" [class.green]="resultPet['形态']['有异色形态']&&resultPet['形态']['异色赛季']===item['形态']['异色赛季']"
+          [class.yellow]="resultPet['形态']['有异色形态']">有异色形态:S{{item['形态']['异色赛季']+getShinySNumArrow(item['形态']['异色赛季'])}}</span>
         }
       </div>
     </div>

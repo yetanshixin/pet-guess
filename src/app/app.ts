@@ -20,28 +20,44 @@ import { HelpDialog } from './help-dialog/help-dialog';
 export interface Pet {
   编号: number; // NO.1
   名称: string;
-  描述: string;
-  介绍: string;
-  特性: string[];
   属性: string[];
-  总种族值: number;
-  生命: number;
-  物攻: number;
-  魔攻: number;
-  物防: number;
-  魔防: number;
-  速度: number;
-  阶段: number; // 1阶
-  进化等级: number; //lv.1
-  进化方式: string;
-  身高: number[];
-  体重: number[];
-  蛋组: string[];
-  性别比例: string;
-  进化链: string;
-  有地区形态: boolean;
-  有首领形态: boolean;
-  有异色形态: boolean;
+  详情: {
+    描述: string;
+    介绍: string;
+    特性: string[];
+  }
+  种族: {
+    总种族值: number;
+    生命: number;
+    物攻: number;
+    魔攻: number;
+    物防: number;
+    魔防: number;
+    速度: number;
+  }
+  进化: {
+    阶段: number; // 1阶
+    进化等级: number; // lv.1
+    进化方式: string;
+    进化链: number;
+    是初始阶段: boolean;
+    是最终阶段: boolean;
+  }
+  体型: {
+    身高: number[];
+    体重: number[];
+  }
+  生态: {
+    蛋组: string[];
+    雄性占比: number | null;
+    可同乘: boolean;
+  }
+  形态: {
+    有地区形态: boolean;
+    有首领形态: boolean;
+    有异色形态: boolean;
+    异色赛季: number; // S1
+  }
 }
 @Component({
   selector: 'app-root',
@@ -66,6 +82,7 @@ export class App implements OnInit {
   guessChance = 10 // 3-15
   guessList = [] as Pet[]
   playing = false
+  keywords = ['使用', '击败', '血脉', '突破', '天气', '点', '身高', '体重', '交互', '性']
   getPets(): Observable<Pet[]> {
     return this.http.get<Pet[]>(this.jsonPath);
   }
@@ -77,7 +94,8 @@ export class App implements OnInit {
     effect(() => {
       this.data = this.pets();
       if (this.data.length > 0) {
-        this.finalPets = this.getFinalFormPets(this.data)
+        // this.finalPets = this.getFinalFormPets(this.data)
+        this.finalPets = this.data.filter(i => i.进化.是最终阶段)
         this.start()
       }
     })
@@ -97,18 +115,18 @@ export class App implements OnInit {
     return 0
   }
   getAttacksComparison(pet: Pet) {
-    if (pet['物攻'] > pet['魔攻']) {
+    if (pet.种族['物攻'] > pet.种族['魔攻']) {
       return '物攻>魔攻'
-    } else if (pet['物攻'] < pet['魔攻']) {
+    } else if (pet.种族['物攻'] < pet.种族['魔攻']) {
       return '物攻<魔攻'
     } else {
       return '物攻=魔攻'
     }
   }
   getDefensesComparison(pet: Pet) {
-    if (pet['物防'] > pet['魔防']) {
+    if (pet.种族['物防'] > pet.种族['魔防']) {
       return '物防>魔防'
-    } else if (pet['物防'] < pet['魔防']) {
+    } else if (pet.种族['物防'] < pet.种族['魔防']) {
       return '物防<魔防'
     } else {
       return '物防=魔防'
@@ -233,21 +251,21 @@ export class App implements OnInit {
 
     for (const pet of data) {
       // 如果没有进化链标识，则将其名称作为唯一 key，当作独立的进化链处理
-      const chainKey = pet.进化链 || pet.名称;
+      const chainKey = (pet.进化.进化链 + '') || pet.名称;
 
       // 获取该进化链目前记录的最大阶段，默认为 0
       const currentMaxStage = maxStageMap.get(chainKey) || 0;
 
       // 如果当前精灵的阶段更高，则更新记录
-      if (pet.阶段 > currentMaxStage) {
-        maxStageMap.set(chainKey, pet.阶段);
+      if (pet.进化.阶段 > currentMaxStage) {
+        maxStageMap.set(chainKey, pet.进化.阶段);
       }
     }
 
     // 第二步：筛选出阶段数等于该进化链最大阶段数的精灵
     const finalFormPets = data.filter((pet) => {
-      const chainKey = pet.进化链 || pet.名称;
-      return pet.阶段 === maxStageMap.get(chainKey);
+      const chainKey = (pet.进化.进化链 + '') || pet.名称;
+      return pet.进化.阶段 === maxStageMap.get(chainKey);
     });
 
     return finalFormPets;
@@ -256,19 +274,19 @@ export class App implements OnInit {
   // 黄背景逻辑
 
   isBaseStatsYellow(总种族值: number) {
-    if ((this.resultPet['总种族值'] - 50) <= 总种族值 && 总种族值 <= ((this.resultPet['总种族值'] + 50))) {
+    if ((this.resultPet.种族['总种族值'] - 50) <= 总种族值 && 总种族值 <= ((this.resultPet.种族['总种族值'] + 50))) {
       return true
     }
     return false
   }
   isHPYellow(生命: number) {
-    if ((this.resultPet['生命'] - 10) <= 生命 && 生命 <= ((this.resultPet['生命'] + 10))) {
+    if ((this.resultPet.种族['生命'] - 10) <= 生命 && 生命 <= ((this.resultPet.种族['生命'] + 10))) {
       return true
     }
     return false
   }
   isSpeedYellow(速度: number) {
-    if ((this.resultPet['速度'] - 10) <= 速度 && 速度 <= ((this.resultPet['速度'] + 10))) {
+    if ((this.resultPet.种族['速度'] - 10) <= 速度 && 速度 <= ((this.resultPet.种族['速度'] + 10))) {
       return true
     }
     return false
@@ -280,58 +298,66 @@ export class App implements OnInit {
     return false
   }
   isStageYellow(阶段: number) {
-    if ((this.resultPet['阶段'] - 1) <= 阶段 && 阶段 <= ((this.resultPet['阶段'] + 1))) {
+    if ((this.resultPet.进化['阶段'] - 1) <= 阶段 && 阶段 <= ((this.resultPet.进化['阶段'] + 1))) {
       return true
     }
     return false
   }
   isEvolutionMethodYellow(进化方式: string) {
-    if (!this.resultPet['进化方式'] || !进化方式) {
+    if (!this.resultPet.进化['进化方式'] || !进化方式) {
       return false
     }
-    const keywords = ['使用', '击败', '血脉', '突破', '天气', '点', '身高', '体重', '交互', '性']
 
-    return keywords.some(keyword => this.resultPet['进化方式'].includes(keyword) && 进化方式.includes(keyword))
+    return this.keywords.some(keyword => this.resultPet.进化['进化方式'].includes(keyword) && 进化方式.includes(keyword))
   }
   isEvolutionLVYellow(进化等级: number) {
-    if ((this.resultPet['进化等级'] - 5) <= 进化等级 && 进化等级 <= (this.resultPet['进化等级'] + 5)) {
+    if ((this.resultPet.进化['进化等级'] - 5) <= 进化等级 && 进化等级 <= (this.resultPet.进化['进化等级'] + 5)) {
       return true
     }
     return false
   }
   isHeightYellow(平均身高: number) {
-    if (this.formatAverage(this.resultPet['身高']) === 0 || 平均身高 === 0) return false
-    return Math.abs(this.formatAverage(this.resultPet['身高']) - 平均身高) / this.formatAverage(this.resultPet['身高']) <= 0.2
+    if (this.formatAverage(this.resultPet.体型['身高']) === 0 || 平均身高 === 0) return false
+    return Math.abs(this.formatAverage(this.resultPet.体型['身高']) - 平均身高) / this.formatAverage(this.resultPet.体型['身高']) <= 0.2
   }
   isWeightYellow(平均体重: number) {
-    if (this.formatAverage(this.resultPet['体重']) === 0 || 平均体重 === 0) return false
-    return Math.abs(this.formatAverage(this.resultPet['体重']) - 平均体重) / this.formatAverage(this.resultPet['体重']) <= 0.2
+    if (this.formatAverage(this.resultPet.体型['体重']) === 0 || 平均体重 === 0) return false
+    return Math.abs(this.formatAverage(this.resultPet.体型['体重']) - 平均体重) / this.formatAverage(this.resultPet.体型['体重']) <= 0.2
+  }
+  isMaleProportionYellow(雄性占比: number | null) {
+    if (!this.resultPet.生态['雄性占比'] || !雄性占比) {
+      return false
+    }
+    if ((this.resultPet.生态['雄性占比'] - 20) <= 雄性占比 && 雄性占比 <= ((this.resultPet.生态['雄性占比'] + 20))) {
+      return true
+    }
+    return false
   }
 
   // ↑↓箭头逻辑
 
   getBaseStatsArrow(总种族值: number) {
-    if (总种族值 < this.resultPet['总种族值']) {
+    if (总种族值 < this.resultPet.种族['总种族值']) {
       return '↑'
-    } else if (总种族值 > this.resultPet['总种族值']) {
+    } else if (总种族值 > this.resultPet.种族['总种族值']) {
       return '↓'
     } else {
       return ''
     }
   }
   getHPArrow(生命: number) {
-    if (生命 < this.resultPet['生命']) {
+    if (生命 < this.resultPet.种族['生命']) {
       return '↑'
-    } else if (生命 > this.resultPet['生命']) {
+    } else if (生命 > this.resultPet.种族['生命']) {
       return '↓'
     } else {
       return ''
     }
   }
   getSpeedArrow(速度: number) {
-    if (速度 < this.resultPet['速度']) {
+    if (速度 < this.resultPet.种族['速度']) {
       return '↑'
-    } else if (速度 > this.resultPet['速度']) {
+    } else if (速度 > this.resultPet.种族['速度']) {
       return '↓'
     } else {
       return ''
@@ -350,36 +376,60 @@ export class App implements OnInit {
     }
   }
   getStageArrow(阶段: number) {
-    if (阶段 < this.resultPet['阶段']) {
+    if (阶段 < this.resultPet.进化['阶段']) {
       return '↑'
-    } else if (阶段 > this.resultPet['阶段']) {
+    } else if (阶段 > this.resultPet.进化['阶段']) {
       return '↓'
     } else {
       return ''
     }
   }
   getEvolutionLVArrow(进化等级: number) {
-    if (进化等级 < this.resultPet['进化等级']) {
+    if (进化等级 < this.resultPet.进化['进化等级']) {
       return '↑'
-    } else if (进化等级 > this.resultPet['进化等级']) {
+    } else if (进化等级 > this.resultPet.进化['进化等级']) {
       return '↓'
     } else {
       return ''
     }
   }
   getHeightArrow(平均身高: number) {
-    if (平均身高 < this.formatAverage(this.resultPet['身高'])) {
+    if (平均身高 < this.formatAverage(this.resultPet.体型['身高'])) {
       return '↑'
-    } else if (平均身高 > this.formatAverage(this.resultPet['身高'])) {
+    } else if (平均身高 > this.formatAverage(this.resultPet.体型['身高'])) {
       return '↓'
     } else {
       return ''
     }
   }
   getWeightArrow(平均体重: number) {
-    if (平均体重 < this.formatAverage(this.resultPet['体重'])) {
+    if (平均体重 < this.formatAverage(this.resultPet.体型['体重'])) {
       return '↑'
-    } else if (平均体重 > this.formatAverage(this.resultPet['体重'])) {
+    } else if (平均体重 > this.formatAverage(this.resultPet.体型['体重'])) {
+      return '↓'
+    } else {
+      return ''
+    }
+  }
+  getShinySNumArrow(赛季: number) {
+    if (!this.showSArrow) {
+      return ''
+    }
+    if (赛季 < this.resultPet.形态.异色赛季) {
+      return '↑'
+    } else if (赛季 > this.resultPet.形态.异色赛季) {
+      return '↓'
+    } else {
+      return ''
+    }
+  }
+  getMaleProportionArrow(雄性占比: number | null) {
+    if (!this.resultPet.生态.雄性占比 || !雄性占比) {
+      return ''
+    }
+    if (雄性占比 < this.resultPet.生态.雄性占比) {
+      return '↑'
+    } else if (雄性占比 > this.resultPet.生态.雄性占比) {
       return '↓'
     } else {
       return ''

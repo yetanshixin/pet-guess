@@ -15,14 +15,16 @@
         <div class="pet-right">
             <div class="编号">{{'NO.'+data.pet['编号']}}</div>
             <div class="名称">{{data.pet['名称']}}</div>
-            <div class="描述">{{data.pet['描述']}}</div>
+            @if (data.pet['详情']['描述']){
+            <div class="描述">{{data.pet['详情']['描述']}}</div>
+            }
         </div>
     </div>
     <div class="特性-box">
-        <div class="特性名">{{data.pet['特性'][0]}}</div>
-        <div class="特性">{{data.pet['特性'][1]}}</div>
+        <div class="特性名">{{data.pet['详情']['特性'][0]}}</div>
+        <div class="特性">{{data.pet['详情']['特性'][1]}}</div>
     </div>
-    <div class="介绍-box">{{data.pet['介绍']}}</div>
+    <div class="介绍-box">{{data.pet['详情']['介绍']}}</div>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end" class="dialog-footer">
