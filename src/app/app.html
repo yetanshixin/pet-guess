@@ -119,7 +119,7 @@
         @for (i of item['生态']['蛋组']; track $index) {
         <span class="tag" [class.green]="resultPet['生态']['蛋组'].includes(i)">{{i}}</span>
         }
-        @if (item['生态']['雄性占比']){
+        @if (item['生态']['雄性占比']!=null){
         <span class="tag" [class.green]="item['生态']['雄性占比']===resultPet['生态']['雄性占比']"
           [class.yellow]="isMaleProportionYellow(item['生态']['雄性占比'])">雄性占比:{{item['生态']['雄性占比']+'%'+getMaleProportionArrow(item['生态']['雄性占比'])}}</span>
         }
