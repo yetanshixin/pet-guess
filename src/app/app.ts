@@ -9,7 +9,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -61,7 +60,7 @@ export interface Pet {
 }
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, MatInputModule, FormsModule, MatSlideToggleModule, MatSliderModule, MatDialogModule, MatButtonModule, MatIconModule, MatAutocompleteModule, MatFormFieldModule],
+  imports: [CommonModule, MatInputModule, FormsModule, MatSlideToggleModule, MatSliderModule, MatDialogModule, MatButtonModule, MatAutocompleteModule, MatFormFieldModule],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
