@@ -130,7 +130,7 @@ def get_more_info(url, pet_info, session):
                 if arr:
                     进化等级_str = re.search(r'\d+', arr[0].strip())
                     if 进化等级_str: pet_info["进化"]["进化等级"] = int(进化等级_str.group())
-                    if len(arr) > 1: pet_info["进化"]["进化方式"] = arr[1].strip()
+                    if len(arr) > 1 and arr[1].strip() != "进化": pet_info["进化"]["进化方式"] = arr[1].strip()
 
     雄性占比_list = pet_doc.xpath(
         '//*[@id="rocodex-pEco"]//div[@class="roco-gender-labels"]/span[@class="is-male"]/text()')
