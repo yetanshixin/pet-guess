@@ -82,6 +82,7 @@ export class App implements OnInit {
   guessList = [] as Pet[]
   playing = false
   keywords = ['使用', '击败', '血脉', '突破', '天气', '点', '身高', '体重', '交互', '性', '位于', '处于']
+  SLastNumberList = [347, 375, 442, 468]
   getPets(): Observable<Pet[]> {
     return this.http.get<Pet[]>(this.jsonPath);
   }
@@ -101,17 +102,15 @@ export class App implements OnInit {
   }
   ngOnInit() {
   }
-  getSNum(编号: number) { // S1
-    if (编号 <= 347) {
-      return 1
-    } else if (348 <= 编号 && 编号 <= 375) {
-      return 2
-    } else if (376 <= 编号 && 编号 <= 442) {
-      return 3
-    } else if (443 <= 编号) {
-      return 4
+  getSNum(编号: number): number { // S1
+    // 每个元素是该赛季的"结束编号"
+    for (let i = 0; i < this.SLastNumberList.length; i++) {
+      if (编号 <= this.SLastNumberList[i]) {
+        return i + 1;
+      }
     }
-    return 0
+    // 超过所有已知赛季区间，进入最新赛季
+    return this.SLastNumberList.length + 1;
   }
   getAttacksComparison(pet: Pet) {
     if (pet.种族['物攻'] > pet.种族['魔攻']) {
